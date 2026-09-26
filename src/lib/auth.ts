@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import {db} from "@/drizzle/db";
+import { db } from "@/drizzle/db";
 import { config } from "dotenv";
-import { dash } from "@better-auth/infra";
+import { dash, sendEmail } from "@better-auth/infra";
 import { schema } from "better-auth/client/plugins";
 
 config({ path: ".env.local" });
@@ -13,18 +13,26 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
-  user:{
-    additionalFields:{
-      role:{
+
+  user: {
+    additionalFields: {
+      role: {
         type: "string",
         required: true,
         defaultValue: "Staff",
-        input: false
+        input: false,
       },
     },
   },
+
   emailAndPassword: {
     enabled: true,
+  },
+
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {},
   },
   plugins: [nextCookies(), dash()],
 });
