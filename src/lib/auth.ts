@@ -3,8 +3,8 @@ import { nextCookies } from "better-auth/next-js";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/drizzle/db";
 import { config } from "dotenv";
-import { dash, sendEmail } from "@better-auth/infra";
-import { schema } from "better-auth/client/plugins";
+import { dash } from "@better-auth/infra";
+import * as schema from "@/db/schema";
 
 config({ path: ".env.local" });
 
