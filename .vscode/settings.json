@@ -1,0 +1,8 @@
+{
+  "editor.codeLens": true,
+  "javascript.referencesCodeLens.enabled": true,
+  "javascript.implementationsCodeLens.enabled": true,
+  "typescript.referencesCodeLens.enabled": true,
+  "typescript.implementationsCodeLens.enabled": true,
+  "typescript.tsserver.maxTsServerMemory": 4096
+}

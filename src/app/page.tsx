@@ -1,7 +1,5 @@
-export default function IndexPage() {
-  return (
-    <div className='flex flex-col items-center justify-center h-full'>
-      <h1 className='text-4xl font-bold'>Appointment System</h1>
-    </div>
-  )
+import { redirect } from "next/navigation";
+
+export default async function IndexPage() {
+  redirect("./login");
 }
