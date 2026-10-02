@@ -45,6 +45,7 @@ export function SignUpForm({ ...props }: React.ComponentProps<typeof Card>) {
       </CardHeader>
       <CardContent>
         <form
+          method="post"
           onSubmit={form.handleSubmit((values) =>
             signUpMutation.mutate(values),
           )}

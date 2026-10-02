@@ -2,18 +2,15 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/drizzle/db";
-import { config } from "dotenv";
 import { dash } from "@better-auth/infra";
-import { sendVerificationEmail } from "@/lib/email/send-verification";
+import { env } from "@/lib/env";
+import { sendVerificationEmail as sendVerificationMessage } from "@/lib/email/send-verification";
 import * as schema from "@/db/schema";
-
-config({ path: ".env.local" });
+import { after } from "next/server";
 
 export const auth = betterAuth({
-  baseURL:
-    process.env.BETTER_AUTH_URL ??
-    process.env.NEXT_PUBLIC_APP_URL ??
-    "http://localhost:3000",
+  baseURL: env.appUrl,
+  trustedOrigins: [env.appUrl],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
@@ -27,19 +24,34 @@ export const auth = betterAuth({
         defaultValue: "Staff",
         input: false,
       },
+      emailVerificationTokenHash: {
+        type: "string",
+        required: false,
+        input: false,
+        returned: false,
+      },
+      emailVerificationTokenExpiresAt: {
+        type: "date",
+        required: false,
+        input: false,
+        returned: false,
+      },
     },
   },
 
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    minPasswordLength: 8,
+    revokeSessionsOnPasswordChange: true,
   },
 
   emailVerification: {
+    expiresIn: 60 * 5,
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      await sendVerificationEmail(user.email, url);
+      after(() => sendVerificationMessage(user.email, url));
     },
   },
   plugins: [nextCookies(), dash()],

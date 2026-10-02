@@ -1,15 +1,17 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index, pgEnum } from "drizzle-orm/pg-core";
-
-const roleEnum = pgEnum("role", ["Owner", "Staff"]);
+import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
+  emailVerificationTokenHash: text("email_verification_token_hash"),
+  emailVerificationTokenExpiresAt: timestamp(
+    "email_verification_token_expires_at",
+  ),
   image: text("image"),
-  role: roleEnum("role").default("Staff").notNull(),
+  role: text("role").default("Staff").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()

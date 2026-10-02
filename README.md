@@ -18,7 +18,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Authentication email
 
-Email verification uses Resend. Set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` in `.env.local`; the sender address must be verified with Resend. Set `BETTER_AUTH_URL` to the application's public origin for correct verification links, or use `NEXT_PUBLIC_APP_URL` as the fallback.
+Email verification uses Nodemailer over SMTP. Development is configured for Ethereal, which captures messages for testing instead of delivering them to real inboxes. The verification sender logs an Ethereal preview URL after each successful send.
+
+Set `SMTP_HOST`, `SMTP_PORT`, and `SMTP_SECURE` in `.env.local`; for authenticated SMTP, set both `SMTP_USER` and `SMTP_PASS`. Configure `EMAIL_FROM` with an address accepted by your provider. Outside development, `SMTP_HOST` and `EMAIL_FROM` are required. Set `APP_URL` to the application's public origin so verification links point to the right host.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
